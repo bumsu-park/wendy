@@ -9,6 +9,10 @@ final class ChatViewModel: ObservableObject {
     @Published var messages: [ChatMessage] = []
     @Published var inputText = ""
     @Published var isLoading = false
+    /// True while a confirmation bubble awaits Approve/Deny. Locks the input:
+    /// the turn is suspended server-side and holds the session's serial queue,
+    /// so a new message would just block behind it.
+    @Published private(set) var pendingConfirmActive = false
     @Published private(set) var hasSavedChat = false
 
     @Published var currentAgent: AgentProfile = Configuration.currentAgent {
@@ -43,6 +47,7 @@ final class ChatViewModel: ObservableObject {
         saveMessages()
         Configuration.currentAgent = currentAgent
         messages = []
+        pendingConfirmActive = false
         hasSavedChat = FileManager.default.fileExists(
             atPath: Self.saveFileURL(for: currentAgent).path
         )
@@ -87,9 +92,8 @@ final class ChatViewModel: ObservableObject {
         let agent = currentAgent
         Task { @MainActor in
             do {
-                let response = try await APIService.shared.sendMessage(text, agent: agent)
-                let assistantMessage = ChatMessage(role: .assistant, content: response)
-                appendMessage(assistantMessage)
+                let outcome = try await APIService.shared.sendMessage(text, agent: agent)
+                handleOutcome(outcome)
             } catch {
                 let explanation = Self.describeError(error)
                 appendMessage(ChatMessage(role: .error, content: "Something went wrong: \(explanation)"))
@@ -97,6 +101,64 @@ final class ChatViewModel: ObservableObject {
             isLoading = false
             saveMessages()
         }
+    }
+
+    // MARK: - Gated tool-call confirmations
+
+    /// Answer a pending confirmation bubble and resume its suspended turn.
+    func respond(to message: ChatMessage, approved: Bool) {
+        guard !isLoading,  // an answer is already in flight — ignore extra taps
+              message.role == .confirmation,
+              message.resolution == .pending,
+              let turnID = message.turnID,
+              let confirmationID = message.confirmationID
+        else { return }
+
+        isLoading = true
+        let agent = currentAgent
+        Task { @MainActor in
+            do {
+                let outcome = try await APIService.shared.confirm(
+                    turnID: turnID,
+                    confirmationID: confirmationID,
+                    approved: approved,
+                    agent: agent
+                )
+                resolve(messageID: message.id, as: approved ? .approved : .denied)
+                handleOutcome(outcome)
+            } catch APIError.confirmationExpired {
+                resolve(messageID: message.id, as: .expired)
+                pendingConfirmActive = false
+            } catch {
+                let explanation = Self.describeError(error)
+                appendMessage(ChatMessage(role: .error, content: "Something went wrong: \(explanation)"))
+                pendingConfirmActive = false
+            }
+            isLoading = false
+            saveMessages()
+        }
+    }
+
+    /// Route a chat outcome: final reply → assistant bubble (unlock); pending
+    /// confirmation → confirmation bubble (lock input until answered).
+    private func handleOutcome(_ outcome: ChatOutcome) {
+        switch outcome {
+        case .reply(let text):
+            appendMessage(ChatMessage(role: .assistant, content: text))
+            pendingConfirmActive = false
+        case .pendingConfirmation(let turnID, let confirmationID, let message):
+            appendMessage(ChatMessage(
+                confirmationMessage: message,
+                turnID: turnID,
+                confirmationID: confirmationID
+            ))
+            pendingConfirmActive = true
+        }
+    }
+
+    private func resolve(messageID: UUID, as resolution: ConfirmResolution) {
+        guard let idx = messages.firstIndex(where: { $0.id == messageID }) else { return }
+        messages[idx].resolution = resolution
     }
 
     private func appendMessage(_ message: ChatMessage) {

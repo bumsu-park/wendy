@@ -25,8 +25,16 @@ struct ChatView: View {
                             }
 
                             ForEach(viewModel.messages) { msg in
-                                MessageBubble(message: msg)
-                                    .id(msg.id)
+                                Group {
+                                    if msg.role == .confirmation {
+                                        ConfirmationView(message: msg) { approved in
+                                            viewModel.respond(to: msg, approved: approved)
+                                        }
+                                    } else {
+                                        MessageBubble(message: msg)
+                                    }
+                                }
+                                .id(msg.id)
                             }
 
                             if viewModel.isLoading {
@@ -54,8 +62,12 @@ struct ChatView: View {
 
                 InputBar(
                     text: $viewModel.inputText,
-                    placeholder: "Message \(viewModel.currentAgent.displayName)...",
-                    isLoading: viewModel.isLoading,
+                    placeholder: viewModel.pendingConfirmActive
+                        ? "Awaiting confirmation..."
+                        : "Message \(viewModel.currentAgent.displayName)...",
+                    // A pending confirmation locks the input: the turn is
+                    // suspended server-side until it's answered.
+                    isLoading: viewModel.isLoading || viewModel.pendingConfirmActive,
                     onSend: { viewModel.send() }
                 )
             }
