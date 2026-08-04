@@ -76,11 +76,37 @@ final class APIService {
         return try await post(path: "/api/chat/confirm", body: body, agent: agent)
     }
 
+    /// Register the APNs device token with a gated backend (open-bbum #57).
+    /// The reply is `{ok:true}` — no chat body to decode, just check the status.
+    func registerPushToken(
+        _ token: String,
+        agent: AgentProfile
+    ) async throws {
+        struct Body: Encodable { let device_token: String }
+        _ = try await sendRequest(
+            path: "/api/push/register",
+            body: Body(device_token: token),
+            agent: agent
+        )
+    }
+
     private func post(
         path: String,
         body: some Encodable,
         agent: AgentProfile
     ) async throws -> ChatOutcome {
+        let data = try await sendRequest(path: path, body: body, agent: agent)
+        let decoded = try JSONDecoder().decode(ChatResponseBody.self, from: data)
+        return try decoded.toOutcome()
+    }
+
+    /// Build + send a POST with the agent's `X-API-Key`, returning the raw response
+    /// body on HTTP 200. Shared by `/api/chat`, `/api/chat/confirm`, and push register.
+    private func sendRequest(
+        path: String,
+        body: some Encodable,
+        agent: AgentProfile
+    ) async throws -> Data {
         guard Configuration.isConfigured(for: agent) else {
             throw APIError.notConfigured
         }
@@ -110,8 +136,7 @@ final class APIService {
             throw APIError.serverError(statusCode: httpResponse.statusCode)
         }
 
-        let decoded = try JSONDecoder().decode(ChatResponseBody.self, from: data)
-        return try decoded.toOutcome()
+        return data
     }
 }
 

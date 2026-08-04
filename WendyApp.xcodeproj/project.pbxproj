@@ -19,6 +19,8 @@
 		8A1B2C3D4E5F60718293A4C3 /* InputBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70819203A4C3 /* InputBar.swift */; };
 		8A1B2C3D4E5F60718293A4C4 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70819203A4C4 /* SettingsView.swift */; };
 		8A1B2C3D4E5F60718293A4C5 /* ConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70819203A4C5 /* ConfirmationView.swift */; };
+		8A1B2C3D4E5F60718293A4D1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70819203A4D1 /* AppDelegate.swift */; };
+		8A1B2C3D4E5F60718293A4D2 /* PushManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70819203A4D2 /* PushManager.swift */; };
 		AA1B2C3D4E5F60718293A4D0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA1B2C3D4E5F70819203A4D0 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -33,6 +35,9 @@
 		1A2B3C4D5E6F70819203A4C3 /* InputBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputBar.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F70819203A4C4 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F70819203A4C5 /* ConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationView.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F70819203A4D1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F70819203A4D2 /* PushManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushManager.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F70819203A4D3 /* WendyApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WendyApp.entitlements; sourceTree = "<group>"; };
 		2A3B4C5D6E7F80910213A4B5 /* WendyApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WendyApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F8304352F6E25E40096B3EB /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		AA1B2C3D4E5F70819203A4D0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -63,6 +68,8 @@
 			isa = PBXGroup;
 			children = (
 				1A2B3C4D5E6F70819203A4B5 /* WendyApp.swift */,
+				1A2B3C4D5E6F70819203A4D1 /* AppDelegate.swift */,
+				1A2B3C4D5E6F70819203A4D3 /* WendyApp.entitlements */,
 				AA1B2C3D4E5F70819203A4D0 /* Assets.xcassets */,
 				4A5B6C7D8E9F00A11213B4C7 /* Models */,
 				4A5B6C7D8E9F00A11213B4C8 /* ViewModels */,
@@ -105,6 +112,7 @@
 			isa = PBXGroup;
 			children = (
 				1A2B3C4D5E6F70819203A4B8 /* APIService.swift */,
+				1A2B3C4D5E6F70819203A4D2 /* PushManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -189,6 +197,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				8A1B2C3D4E5F60718293A4B5 /* WendyApp.swift in Sources */,
+				8A1B2C3D4E5F60718293A4D1 /* AppDelegate.swift in Sources */,
+				8A1B2C3D4E5F60718293A4D2 /* PushManager.swift in Sources */,
 				8A1B2C3D4E5F60718293A4B6 /* ChatMessage.swift in Sources */,
 				8A1B2C3D4E5F60718293A4B7 /* Configuration.swift in Sources */,
 				8A1B2C3D4E5F60718293A4B8 /* APIService.swift in Sources */,
@@ -315,6 +325,7 @@
 			baseConfigurationReference = 7F8304352F6E25E40096B3EB /* Secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = WendyApp/WendyApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -343,6 +354,7 @@
 			baseConfigurationReference = 7F8304352F6E25E40096B3EB /* Secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = WendyApp/WendyApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
