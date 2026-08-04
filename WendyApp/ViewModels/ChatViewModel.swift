@@ -15,6 +15,12 @@ final class ChatViewModel: ObservableObject {
     @Published private(set) var pendingConfirmActive = false
     @Published private(set) var hasSavedChat = false
 
+    /// Consecutive confirmations seen in the current turn. A buggy/hostile server
+    /// could chain confirmations forever; past the cap we stop rendering cards and
+    /// let the server's own timeout auto-deny the rest.
+    private var confirmationsThisTurn = 0
+    private let maxConfirmationsPerTurn = 10
+
     @Published var currentAgent: AgentProfile = Configuration.currentAgent {
         didSet {
             guard oldValue != currentAgent else { return }
@@ -88,6 +94,7 @@ final class ChatViewModel: ObservableObject {
         appendMessage(userMessage)
         inputText = ""
         isLoading = true
+        confirmationsThisTurn = 0
 
         let agent = currentAgent
         Task { @MainActor in
@@ -147,6 +154,15 @@ final class ChatViewModel: ObservableObject {
             appendMessage(ChatMessage(role: .assistant, content: text))
             pendingConfirmActive = false
         case .pendingConfirmation(let turnID, let confirmationID, let message):
+            confirmationsThisTurn += 1
+            guard confirmationsThisTurn <= maxConfirmationsPerTurn else {
+                appendMessage(ChatMessage(
+                    role: .error,
+                    content: "Too many confirmations in one turn — stopping. Remaining actions were auto-denied."
+                ))
+                pendingConfirmActive = false
+                return
+            }
             appendMessage(ChatMessage(
                 confirmationMessage: message,
                 turnID: turnID,
