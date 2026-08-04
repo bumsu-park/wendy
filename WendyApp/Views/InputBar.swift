@@ -2,7 +2,7 @@ import SwiftUI
 
 struct InputBar: View {
     @Binding var text: String
-    var placeholder: String = "Message Wendy..."
+    var placeholder: String = "Message BBUM..."
     let isLoading: Bool
     let onSend: () -> Void
     @State private var textFieldID = UUID()

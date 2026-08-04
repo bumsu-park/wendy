@@ -45,7 +45,7 @@ struct ConfirmationView: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(actionTitle)
                         .font(.subheadline.weight(.semibold))
-                    Text("Wendy is asking for permission")
+                    Text("BBUM is asking for permission")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }

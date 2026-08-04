@@ -5,7 +5,7 @@ enum AgentProfile: String, CaseIterable, Codable {
 
     var displayName: String {
         switch self {
-        case .personal: "Wendy"
+        case .personal: "BBUM"
         case .business: "Business"
         }
     }
