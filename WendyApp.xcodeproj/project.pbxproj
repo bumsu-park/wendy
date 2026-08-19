@@ -21,6 +21,9 @@
 		8A1B2C3D4E5F60718293A4C5 /* ConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70819203A4C5 /* ConfirmationView.swift */; };
 		8A1B2C3D4E5F60718293A4D1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70819203A4D1 /* AppDelegate.swift */; };
 		8A1B2C3D4E5F60718293A4D2 /* PushManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70819203A4D2 /* PushManager.swift */; };
+		8A1B2C3D4E5F60718293A4E1 /* BBumList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70819203A4E1 /* BBumList.swift */; };
+		8A1B2C3D4E5F60718293A4E2 /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70819203A4E2 /* ListViewModel.swift */; };
+		8A1B2C3D4E5F60718293A4E3 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70819203A4E3 /* ListView.swift */; };
 		AA1B2C3D4E5F60718293A4D0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA1B2C3D4E5F70819203A4D0 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -37,6 +40,9 @@
 		1A2B3C4D5E6F70819203A4C5 /* ConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationView.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F70819203A4D1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F70819203A4D2 /* PushManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushManager.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F70819203A4E1 /* BBumList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBumList.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F70819203A4E2 /* ListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModel.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F70819203A4E3 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F70819203A4D3 /* WendyApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WendyApp.entitlements; sourceTree = "<group>"; };
 		2A3B4C5D6E7F80910213A4B5 /* WendyApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WendyApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F8304352F6E25E40096B3EB /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
@@ -84,6 +90,7 @@
 			children = (
 				1A2B3C4D5E6F70819203A4B6 /* ChatMessage.swift */,
 				1A2B3C4D5E6F70819203A4B7 /* Configuration.swift */,
+				1A2B3C4D5E6F70819203A4E1 /* BBumList.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -92,6 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				1A2B3C4D5E6F70819203A4C0 /* ChatViewModel.swift */,
+				1A2B3C4D5E6F70819203A4E2 /* ListViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -104,6 +112,7 @@
 				1A2B3C4D5E6F70819203A4C5 /* ConfirmationView.swift */,
 				1A2B3C4D5E6F70819203A4C3 /* InputBar.swift */,
 				1A2B3C4D5E6F70819203A4C4 /* SettingsView.swift */,
+				1A2B3C4D5E6F70819203A4E3 /* ListView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -202,6 +211,9 @@
 				8A1B2C3D4E5F60718293A4B6 /* ChatMessage.swift in Sources */,
 				8A1B2C3D4E5F60718293A4B7 /* Configuration.swift in Sources */,
 				8A1B2C3D4E5F60718293A4B8 /* APIService.swift in Sources */,
+				8A1B2C3D4E5F60718293A4E1 /* BBumList.swift in Sources */,
+				8A1B2C3D4E5F60718293A4E2 /* ListViewModel.swift in Sources */,
+				8A1B2C3D4E5F60718293A4E3 /* ListView.swift in Sources */,
 				8A1B2C3D4E5F60718293A4C0 /* ChatViewModel.swift in Sources */,
 				8A1B2C3D4E5F60718293A4C1 /* ChatView.swift in Sources */,
 				8A1B2C3D4E5F60718293A4C2 /* MessageBubble.swift in Sources */,

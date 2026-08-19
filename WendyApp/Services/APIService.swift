@@ -90,6 +90,33 @@ final class APIService {
         )
     }
 
+    /// All lists (name + items) from `GET /api/lists` (open-bbum #102).
+    func fetchLists(
+        agent: AgentProfile = Configuration.currentAgent
+    ) async throws -> [BBumList] {
+        let data = try await sendRequest(path: "/api/lists", method: "GET", bodyData: nil, agent: agent)
+        return try JSONDecoder().decode(ListsResponse.self, from: data).lists
+    }
+
+    /// Check or uncheck one list item by exact text. The reply is `{ok:true}`.
+    func toggleItem(
+        list: String,
+        text: String,
+        checked: Bool,
+        agent: AgentProfile = Configuration.currentAgent
+    ) async throws {
+        struct Body: Encodable {
+            let list: String
+            let text: String
+            let checked: Bool
+        }
+        _ = try await sendRequest(
+            path: "/api/lists/toggle",
+            body: Body(list: list, text: text, checked: checked),
+            agent: agent
+        )
+    }
+
     private func post(
         path: String,
         body: some Encodable,
@@ -100,11 +127,26 @@ final class APIService {
         return try decoded.toOutcome()
     }
 
-    /// Build + send a POST with the agent's `X-API-Key`, returning the raw response
-    /// body on HTTP 200. Shared by `/api/chat`, `/api/chat/confirm`, and push register.
+    /// POST an Encodable body — the common case.
     private func sendRequest(
         path: String,
         body: some Encodable,
+        agent: AgentProfile
+    ) async throws -> Data {
+        try await sendRequest(
+            path: path,
+            method: "POST",
+            bodyData: try JSONEncoder().encode(body),
+            agent: agent
+        )
+    }
+
+    /// Build + send a request with the agent's `X-API-Key`, returning the raw
+    /// response body on HTTP 200. Shared by every app-facing endpoint.
+    private func sendRequest(
+        path: String,
+        method: String,
+        bodyData: Data?,
         agent: AgentProfile
     ) async throws -> Data {
         guard Configuration.isConfigured(for: agent) else {
@@ -117,11 +159,11 @@ final class APIService {
         }
 
         var request = URLRequest(url: url)
-        request.httpMethod = "POST"
+        request.httpMethod = method
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue(Configuration.apiKey(for: agent), forHTTPHeaderField: "X-API-Key")
         request.timeoutInterval = 120
-        request.httpBody = try JSONEncoder().encode(body)
+        request.httpBody = bodyData
 
         let (data, response) = try await URLSession.shared.data(for: request)
 
